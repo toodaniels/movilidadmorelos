@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "movilidadmorelos"
+version = "0.1.0"
+description = ""
+authors = ["Daniel Torres <torresestradadaniel@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pandas = "^2.2.3"
+requests = "^2.32.3"
+beautifulsoup4 = "^4.12.3"
+selenium = "^4.27.1"
+geopandas = "^1.0.1"
+pyogrio = "^0.10.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
