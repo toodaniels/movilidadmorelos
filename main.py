@@ -1,24 +1,25 @@
 import requests
 from bs4 import BeautifulSoup
 
-# URL de la página web
-url = "https://sites.google.com/view/movilidadmorelos/oriente/ruta-1-oriente"
+main_url = 'https://sites.google.com/view/movilidadmorelos'
 
-# Hacer la solicitud
-response = requests.get(url)
-
-
-print(response.status_code)
-
-if response.status_code == 200:
-    # Analizar el HTML
-    soup = BeautifulSoup(response.text, 'html.parser')
+def find_all(path, element_filter, class_filter=None):
+    url = f'{main_url}/{path}'
+    response = requests.get(url)
     
-    # Buscar el iframe del mapa
-    iframe = soup.find_all('iframe')
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text, 'html.parser')
+        return soup.find_all(element_filter, class_=class_filter)
+    else:
+        print(f"Error al acceder a la página. Código de estado: {response.status_code}")
+        return []
+
+def get_map_ids():
+
+    iframes = find_all('oriente/ruta-1-oriente', 'iframe')
 
     # muestra el enlace de cada mapa en la pagina
-    for iframe_tag in iframe:
+    for iframe_tag in iframes:
         src = iframe_tag['src']
         label = iframe_tag['aria-label'].replace('Map, ', '')
         route_code, route_title = label.split('.-')        
@@ -26,12 +27,14 @@ if response.status_code == 200:
         print(f"Mapa ID: {map_id}")
         print(route_code, route_title)
 
-        
-# else:
-#     print(f"Error al acceder a la página. Código de estado: {response.status_code}")
+def get_routes():
+    routes = find_all('oriente/ruta-1-oriente', element_filter='a', class_filter='XqQF9c')
 
-zones = [
-    'CENTRO',
-    'SUR',
-    'ORIENTE'
-]
+    for route_tag in routes:
+        href = route_tag['href']
+        print(href)
+
+if __name__ == '__main__':
+    get_map_ids()
+    get_routes()
+
